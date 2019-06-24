@@ -6,6 +6,7 @@ import socket
 import subprocess
 
 from server import TaskQueueServer
+from os.path import exists, abspath, isfile
 
 class ServerBaseTest(TestCase):
     def setUp(self):
@@ -66,3 +67,6 @@ class ServerBaseTest(TestCase):
     def test_save(self):
         response = self.send(b'SAVE')
         self.assertEqual(b'OK', response)
+        path = './checkpoint/'
+        path = abspath(path)
+        self.assertEqual(True, exists(path))
