@@ -7,7 +7,6 @@ import subprocess
 
 from server import TaskQueueServer
 
-
 class ServerBaseTest(TestCase):
     def setUp(self):
         self.server = subprocess.Popen(['python3.8', 'server.py'])
@@ -63,3 +62,7 @@ class ServerBaseTest(TestCase):
     def test_cast_to_str(self):
         res = TaskQueueServer.from_bytes_to_str(b'sdfsfsfsfsd')
         self.assertEqual('sdfsfsfsfsd', res)
+
+    def test_save(self):
+        response = self.send(b'SAVE')
+        self.assertEqual(b'OK', response)

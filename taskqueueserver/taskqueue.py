@@ -22,9 +22,9 @@ class TaskQueue:
             pickle_file = open(self._path + 'store.pickle', 'rb')
             queue, processing_tasks = pickle.load(pickle_file)
         except FileNotFoundError:
-            print(f'No store.pickle file found in "{self._path}".')
+            print(f'No store.pickle file in "{self._path}".')
         except EOFError:
-            print(f'File "{self._path}/store.pickle empty.')
+            print(f'File "{self._path}/store.pickle" empty.')
         else:
             pickle_file.close()
             self._queue = queue
@@ -79,4 +79,4 @@ class TaskQueue:
         with open(path, 'wb') as pickle_file:
             obj_tuple = (self._queue, self._processing_tasks)
             pickle.dump(obj_tuple, pickle_file)
-        return b'SAVED'
+        return b'OK'
