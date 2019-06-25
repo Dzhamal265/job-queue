@@ -25,19 +25,21 @@ class CommandParser:
 
 
 class SocketServer:
-    BUFFER_SIZE = 1000000
+    
+    BUFFER_SIZE = 1024
+
     def __init__(self, ip: str, port: int):
         self._ip: str = ip
         self._port: int = port
-    
+        self.sock: SocketType = socket(AF_INET, SOCK_STREAM)
+        self.sock.setsockopt(SOL_SOCKET, SO_REUSEADDR, 1)
+        self.sock.bind((self._ip, self._port))
+        self.sock.listen(1)
+
     def run(self, callback: Callable) -> None:
-        with socket(AF_INET, SOCK_STREAM) as sock:
-            sock.setsockopt(SOL_SOCKET, SO_REUSEADDR, 1)
-            sock.bind((self._ip, self._port))
-            sock.listen(1)
-            while True:
-                conn, addr = sock.accept()
-                self._handle_connection(conn, addr, callback)
+        while True:
+            conn, addr = self.sock.accept()
+            self._handle_connection(conn, addr, callback)
 
     def _handle_connection(self, connection: SocketType, address: Tuple, callback: Callable) -> None:
         with connection:
