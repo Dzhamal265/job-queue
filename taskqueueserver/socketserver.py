@@ -16,7 +16,7 @@ class CommandParser:
         self.command: AnyStr = command
         self._compiled_patterns: List = []
         for pattern in self.patterns:
-            self._compiled_patterns.append(re.compile(bytes(pattern, 'utf8')))
+            self._compiled_patterns.append(re.compile(bytes(pattern, 'utf8'), re.DOTALL))
     
     def get_command_match(self) -> Dict:
         for pattern in self._compiled_patterns:
@@ -47,6 +47,5 @@ class SocketServer:
             task = CommandParser(data).get_command_match()
             if not task:
                 connection.send(b'ERROR')
-            else:
-                response = callback(task)
-                connection.send(response)
+            response = callback(task)
+            connection.send(response)
