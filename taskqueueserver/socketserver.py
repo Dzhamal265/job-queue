@@ -31,14 +31,14 @@ class SocketServer:
     def __init__(self, ip: str, port: int):
         self._ip: str = ip
         self._port: int = port
-        self.sock: SocketType = socket(AF_INET, SOCK_STREAM)
-        self.sock.setsockopt(SOL_SOCKET, SO_REUSEADDR, 1)
-        self.sock.bind((self._ip, self._port))
-        self.sock.listen(1)
+        self._sock: SocketType = socket(AF_INET, SOCK_STREAM)
+        self._sock.setsockopt(SOL_SOCKET, SO_REUSEADDR, 1)
+        self._sock.bind((self._ip, self._port))
+        self._sock.listen(1)
 
     def run(self, callback: Callable) -> None:
         while True:
-            conn, addr = self.sock.accept()
+            conn, addr = self._sock.accept()
             self._handle_connection(conn, addr, callback)
 
     def _handle_connection(self, connection: SocketType, address: Tuple, callback: Callable) -> None:
