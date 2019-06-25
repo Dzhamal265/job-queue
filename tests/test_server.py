@@ -52,10 +52,9 @@ class ServerBaseTest(TestCase):
     def test_long_input(self):
         data = '12345' * 1000
         data = '{} {}'.format(len(data), data)
-        data = data.encode('utf')
+        data = data.encode('utf-8')
         task_id = self.send(b'ADD 1 ' + data)
         self.assertEqual(b'YES', self.send(b'IN 1 ' + task_id))
-        self.assertEqual(task_id + b' ' + data, self.send(b'GET 1'))
 
     def test_wrong_command(self):
         self.assertEqual(b'ERROR', self.send(b'ADDD 1 5 12345'))
